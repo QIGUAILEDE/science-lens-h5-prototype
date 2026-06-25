@@ -4,6 +4,7 @@ import { applyStructurePass } from "../passes/structure-pass.js";
 import { applySensorNoise } from "../passes/noise-pass.js";
 import { applyOptics, drawMicroscopeMask } from "../passes/optics-pass.js";
 import { WebGLSciencePass } from "../shaders/webgl-science-pass.js";
+import { RegionAnalyzer } from "../analysis/region-analyzer.js";
 
 export class ScienceRenderer {
   constructor(canvas, options = {}) {
@@ -16,6 +17,7 @@ export class ScienceRenderer {
       console.warn("WebGL science pass unavailable, using Canvas fallback.", error);
       this.webglPass = null;
     }
+    this.analyzer = new RegionAnalyzer();
   }
 
   resize(size) {
@@ -54,7 +56,17 @@ export class ScienceRenderer {
   }
 
   renderScienceCamera(style, state, text) {
-    const webglResult = this.webglPass?.render(this.canvas, style, state);
+    const analysis = this.analyzer.analyze(this.canvas, style, state);
+    if (state.debugView && state.debugView !== "final" && analysis.debugCanvases[state.debugView]) {
+      this.ctx.imageSmoothingEnabled = false;
+      this.ctx.clearRect(0, 0, this.size, this.size);
+      this.ctx.drawImage(analysis.debugCanvases[state.debugView], 0, 0, this.size, this.size);
+      this.ctx.imageSmoothingEnabled = true;
+      this.drawDebugMetadata(state.debugView, analysis);
+      return;
+    }
+
+    const webglResult = this.webglPass?.render(this.canvas, style, state, analysis);
     if (webglResult) {
       this.ctx.clearRect(0, 0, this.size, this.size);
       this.ctx.drawImage(webglResult, 0, 0, this.size, this.size);
@@ -191,8 +203,23 @@ export class ScienceRenderer {
     ctx.restore();
   }
 
+  drawDebugMetadata(view, analysis) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.66)";
+    ctx.fillRect(24, 24, this.size * 0.42, 104);
+    ctx.fillStyle = "#fff";
+    ctx.font = `${Math.max(20, this.size * 0.02)}px 'SFMono-Regular', Menlo, monospace`;
+    ctx.fillText(`Debug: ${view}`, 44, 42);
+    ctx.globalAlpha = 0.82;
+    ctx.fillText(`regions ${analysis.summary.count}`, 44, 74);
+    ctx.fillText(`texture ${analysis.summary.meanTexture.toFixed(2)} edge ${analysis.summary.meanEdge.toFixed(2)}`, 44, 106);
+    ctx.restore();
+  }
+
   dispose() {
     this.webglPass?.dispose();
+    this.analyzer?.clear();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }

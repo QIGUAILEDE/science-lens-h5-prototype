@@ -18,6 +18,7 @@ const downloadButton = document.querySelector("#downloadButton");
 const saveRecipeButton = document.querySelector("#saveRecipeButton");
 const loadRecipeButton = document.querySelector("#loadRecipeButton");
 const qualitySelect = document.querySelector("#qualitySelect");
+const debugViewSelect = document.querySelector("#debugViewSelect");
 const titleInput = document.querySelector("#titleInput");
 const subtitleInput = document.querySelector("#subtitleInput");
 const metaInput = document.querySelector("#metaInput");
@@ -28,6 +29,7 @@ const controls = {
   offsetY: document.querySelector("#offsetYRange"),
   rotation: document.querySelector("#rotationRange"),
   intensity: document.querySelector("#intensityRange"),
+  spatialVariation: document.querySelector("#spatialVariationRange"),
   cardScale: document.querySelector("#cardScaleRange"),
   cardRotate: document.querySelector("#cardRotateRange"),
   reflection: document.querySelector("#reflectionRange")
@@ -48,12 +50,14 @@ const state = {
   offsetY: 0,
   rotation: 0,
   intensity: 1,
+  spatialVariation: 0.55,
   cardScale: 1,
   cardRotate: 0,
   reflection: 0.5,
   previewSize: 1200,
   quality: "standard",
   seed: 1,
+  debugView: "final",
   text: { title: "", subtitle: "", meta: "" },
   pointer: null
 };
@@ -117,6 +121,10 @@ function bindEvents() {
   qualitySelect.addEventListener("change", () => {
     state.quality = qualitySelect.value;
     state.previewSize = QUALITY_PRESETS[state.quality].previewSize;
+    draw();
+  });
+  debugViewSelect.addEventListener("change", () => {
+    state.debugView = debugViewSelect.value;
     draw();
   });
   Object.values(controls).forEach((input) => input.addEventListener("input", syncStateFromDom));
@@ -247,6 +255,7 @@ function syncStateFromDom() {
   state.offsetY = Number(controls.offsetY.value);
   state.rotation = Number(controls.rotation.value);
   state.intensity = Number(controls.intensity.value);
+  state.spatialVariation = Number(controls.spatialVariation.value);
   state.cardScale = Number(controls.cardScale.value);
   state.cardRotate = Number(controls.cardRotate.value);
   state.reflection = Number(controls.reflection.value);
@@ -268,6 +277,7 @@ function syncDomFromState() {
   controls.offsetY.value = state.offsetY;
   controls.rotation.value = state.rotation;
   controls.intensity.value = state.intensity;
+  controls.spatialVariation.value = state.spatialVariation;
   controls.cardScale.value = state.cardScale;
   controls.cardRotate.value = state.cardRotate;
   controls.reflection.value = state.reflection;
@@ -275,6 +285,7 @@ function syncDomFromState() {
   subtitleInput.value = state.text.subtitle;
   metaInput.value = state.text.meta;
   qualitySelect.value = state.quality;
+  debugViewSelect.value = state.debugView;
 }
 
 function resetTransform() {
@@ -284,6 +295,7 @@ function resetTransform() {
     offsetY: 0,
     rotation: 0,
     intensity: 1,
+    spatialVariation: 0.55,
     cardScale: 1,
     cardRotate: 0,
     reflection: 0.5,
@@ -300,6 +312,7 @@ function snapshotParams() {
     offsetY: state.offsetY,
     rotation: state.rotation,
     intensity: state.intensity,
+    spatialVariation: state.spatialVariation,
     cardScale: state.cardScale,
     cardRotate: state.cardRotate,
     reflection: state.reflection

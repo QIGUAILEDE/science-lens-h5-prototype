@@ -85,6 +85,10 @@
             <input id="intensityRange" type="range" min="0" max="1.5" value="1" step="0.01" />
           </label>
           <label>
+            非均匀程度
+            <input id="spatialVariationRange" type="range" min="0" max="1" value="0.55" step="0.01" />
+          </label>
+          <label>
             透卡缩放
             <input id="cardScaleRange" type="range" min="0.7" max="1.25" value="1" step="0.01" />
           </label>
@@ -113,6 +117,21 @@
               <option value="smooth">流畅 2048px</option>
               <option value="standard" selected>标准 3072px</option>
               <option value="high">高清 4096px</option>
+            </select>
+          </label>
+          <label>
+            调试视图
+            <select id="debugViewSelect">
+              <option value="final" selected>最终合成</option>
+              <option value="parameter">Parameter Map</option>
+              <option value="luminance">Luminance</option>
+              <option value="edge">Edge</option>
+              <option value="texture">Texture</option>
+              <option value="saliency">Saliency</option>
+              <option value="channelA">Channel A</option>
+              <option value="channelB">Channel B</option>
+              <option value="stain">Stain</option>
+              <option value="material">Material</option>
             </select>
           </label>
         </div>

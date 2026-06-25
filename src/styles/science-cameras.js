@@ -10,6 +10,8 @@ export const SCIENCE_CAMERAS = [
     summary: "灰蓝低饱和、透明样品边缘明暗光环、显微玻片质感。",
     recommended: "人物、宠物、食物、透明物、日常物体",
     tone: { exposure: 0.08, contrast: 1.08, gamma: 0.94, saturation: 0.45, blackLevel: -0.05 },
+    analysis: { useLab: true, useSuperpixels: true, superpixelCount: 256, clusterCount: 6, useSaliency: true, useTexture: true, useEdges: true },
+    regionMapping: { halo: ["edge", "texture", "saliency"], stain: ["luminance", "cluster"] },
     structure: { method: "dog-halo", amount: 0.42 },
     optics: { field: "microscope-circle", coverage: 0.84, vignette: 0.18, dust: 0.08, bloom: 0.04 },
     sensor: { readNoise: 0.012, shotNoise: 0.018, fixedPatternNoise: 0.002, hotPixels: 0 },
@@ -27,6 +29,12 @@ export const SCIENCE_CAMERAS = [
     summary: "黑场扣除、结构通道映射绿色、细节通道映射紫色，带 Bloom 与点状信号。",
     recommended: "人像轮廓、宠物、花束、树枝、夜景",
     tone: { exposure: -0.24, contrast: 1.28, gamma: 0.9, saturation: 1, blackLevel: 0.2 },
+    analysis: { useLab: true, useSuperpixels: true, superpixelCount: 256, clusterCount: 6, useSaliency: true, useTexture: true, useEdges: true },
+    regionMapping: {
+      channelA: { source: ["smooth", "foreground"], strength: 0.86 },
+      channelB: { source: ["detail", "edge"], strength: 0.72 },
+      channelC: { source: ["highlight", "material"], strength: 0.28 }
+    },
     channels: [
       { id: "A", source: "structure", color: "#42FF78", intensity: 0.86, threshold: 0.2 },
       { id: "B", source: "detail", color: "#C44BFF", intensity: 0.72, threshold: 0.28 }
@@ -48,6 +56,8 @@ export const SCIENCE_CAMERAS = [
     summary: "冷灰黑白、高频纹理增强、微弱扫描纹理和电子显微镜参数栏。",
     recommended: "建筑、机械、毛发、树皮、布料、食物表面",
     tone: { exposure: -0.06, contrast: 1.55, gamma: 0.88, saturation: 0, blackLevel: 0.08 },
+    analysis: { useLab: true, useSuperpixels: true, superpixelCount: 256, clusterCount: 6, useSaliency: false, useTexture: true, useEdges: true },
+    regionMapping: { material: ["lab", "texture", "edge"], localContrast: ["edge", "texture"], surface: ["luminance", "direction"] },
     structure: { method: "multi-scale-surface", amount: 0.72 },
     optics: { vignette: 0.16, scanline: 0.05, bloom: 0.03 },
     sensor: { readNoise: 0.025, shotNoise: 0.018, fixedPatternNoise: 0.01, hotPixels: 0.0003 },
@@ -65,6 +75,8 @@ export const SCIENCE_CAMERAS = [
     summary: "保留亮度结构，用粉蓝/绿紫染液感做区域扩散和玻片质感。",
     recommended: "花朵、食物、衣物、玻璃、晚霞、人像",
     tone: { exposure: 0.06, contrast: 1.02, gamma: 0.98, saturation: 1.12, blackLevel: -0.02 },
+    analysis: { useLab: true, useSuperpixels: true, superpixelCount: 256, clusterCount: 6, useSaliency: true, useTexture: true, useEdges: true },
+    regionMapping: { stainStrength: ["color-cluster", "texture", "saliency"], penetration: ["luminance", "edge", "texture"] },
     stain: { primary: "#d980c5", secondary: "#6dd6e8", diffusion: 0.42 },
     structure: { method: "soft-edge", amount: 0.18 },
     optics: { bloom: 0.08, vignette: 0.06, dust: 0.04 },

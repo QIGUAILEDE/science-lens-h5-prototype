@@ -42,6 +42,8 @@ The current rendering engine is Canvas 2D first. Some complex effects, such as l
 
 The first WebGL shader pass is now available for the four flagship science cameras: PH-Live, FL-Duo, SEM-Carbon, and Diffusion-Stain. Other cards and legacy templates continue to use the Canvas 2D fallback path.
 
+The flagship science cameras now also use a non-uniform parameter map generated from image luminance, edge, texture, saliency, and Lab/HSV region features. Use the Debug View selector to inspect intermediate maps such as luminance, edge, texture, saliency, channel A/B, stain, and material.
+
 ## Git Sync Policy
 
 For this project, major updates should be committed and pushed to GitHub by default.

@@ -188,6 +188,61 @@ Per camera behavior:
 
 The shader output is followed by Canvas overlay rendering for metadata, microscope mask, cards, and text. If WebGL is unavailable, the renderer automatically falls back to the Canvas 2D passes.
 
+## Non-Uniform Region-Aware Upgrade
+
+Added:
+
+- `src/imaging/analysis/color-space/conversions.js`
+- `src/imaging/analysis/region-analyzer.js`
+- `src/imaging/parameter-maps/parameter-map-schema.js`
+
+The analyzer runs before science-camera rendering and produces:
+
+- RGB to HSV / Lab features
+- luminance map
+- edge map
+- detail / local contrast map
+- texture map
+- saliency approximation
+- grid-superpixel region features
+- Lab-feature k-means clusters
+- RGBA parameter map
+
+Parameter map channels:
+
+- R: `stainStrengthMap`
+- G: `channelAMap`
+- B: `channelBMap`
+- A: `materialLikeMap + foregroundWeight`
+
+The WebGL shader now samples the parameter map:
+
+- PH-Live: local halo width and stain tone vary by material/stain maps.
+- FL-Duo: channel A/B/C strengths vary by foreground, edge/detail, and material/highlight maps.
+- SEM-Carbon: material response and local micro contrast vary by region.
+- Diffusion-Stain: stain penetration and color mixing vary by cluster/texture/foreground maps.
+
+## Debug Map Viewer
+
+The editor now exposes a debug view selector:
+
+- final
+- parameter
+- luminance
+- edge
+- texture
+- saliency
+- channelA
+- channelB
+- stain
+- material
+
+This makes it possible to verify whether the filter is driven by real image structure rather than a uniform overlay.
+
+## Current Limitation
+
+The current `RegionAnalyzer` uses a grid-superpixel approximation instead of full SLIC. It still extracts region features and clusters them in Lab-like feature space, but boundaries are not yet as natural as true SLIC. The next step should replace the grid cells with iterative SLIC centers while preserving the same `RegionFeature` and `ParameterMap` interfaces.
+
 ## Acceptance Checklist
 
 - Science camera workspace exists.
