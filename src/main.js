@@ -255,7 +255,8 @@ function draw() {
 
 function getItems() {
   if (state.workspace === "cameras") return SCIENCE_CAMERAS;
-  if (state.workspace === "figures") return RESEARCH_FIGURES;
+  if (state.workspace === "figures") return RESEARCH_FIGURES.filter((item) => item.category !== "Image → Figure");
+  if (state.workspace === "analysisFigures") return RESEARCH_FIGURES.filter((item) => item.category === "Image → Figure");
   return state.cards;
 }
 

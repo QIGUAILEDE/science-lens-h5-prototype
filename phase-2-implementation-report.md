@@ -137,3 +137,42 @@ Logo modes:
 - `creative`: direct creative masthead names for concept/user mode: `Nature`, `Science`, `Cell`, and `Neuron`.
 
 The UI exposes this as `刊名字标模式`, and recipe saving stores the selected mode.
+
+## Image to Figure Expansion
+
+Added an independent `Image → Figure` workspace.
+
+New analysis module:
+
+- `src/imaging/analysis/image-analysis.js`
+
+It computes deterministic image-derived data:
+
+- RGB histograms
+- luminance histogram
+- saturation histogram
+- hue histogram with `S > 0.18`
+- mean luminance
+- mean saturation
+- dynamic range
+- highlight/shadow clipping ratios
+- edge density
+- sharpness score
+- Lab-like dominant color clustering
+- local luminance/saturation/warmth/texture grids
+- vertical luminance/saturation/warmth profiles
+
+New first-batch presets:
+
+- `Color · Luminance · Structure Atlas`
+- `Color Profile`
+- `Structure & Texture Atlas`
+- `Pixel Abstraction Atlas`
+- `Visual Data Card`
+
+Important correction:
+
+- The conceptual model view is now derived from sampled image pixels, dominant colors, luminance, and saturation rather than fixed decorative points.
+- RGB, hue, dominant color, profile, scatter, and summary panels all use the same cached image analysis result.
+
+README was rewritten as a Chinese/English bilingual document to match the current product state.
