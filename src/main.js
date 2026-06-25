@@ -22,6 +22,7 @@ const debugViewSelect = document.querySelector("#debugViewSelect");
 const titleInput = document.querySelector("#titleInput");
 const subtitleInput = document.querySelector("#subtitleInput");
 const metaInput = document.querySelector("#metaInput");
+const journalLogoModeSelect = document.querySelector("#journalLogoModeSelect");
 
 const controls = {
   zoom: document.querySelector("#zoomRange"),
@@ -59,6 +60,7 @@ const state = {
   quality: "standard",
   seed: 1,
   debugView: "final",
+  journalLogoMode: "safe",
   text: { title: "", subtitle: "", meta: "" },
   pointer: null
 };
@@ -105,6 +107,7 @@ function bindEvents() {
       params: snapshotParams(),
       text: state.text,
       quality: state.quality,
+      journalLogoMode: state.journalLogoMode,
       seed: state.seed
     });
     saveRecipeButton.textContent = "已保存";
@@ -118,6 +121,7 @@ function bindEvents() {
     Object.assign(state, recipe.params || {});
     state.text = recipe.text || state.text;
     state.quality = recipe.quality || "standard";
+    state.journalLogoMode = recipe.journalLogoMode || "safe";
     syncDomFromState();
     renderWorkspaceTabs();
     renderCategoryTabs();
@@ -132,6 +136,11 @@ function bindEvents() {
   });
   debugViewSelect.addEventListener("change", () => {
     state.debugView = debugViewSelect.value;
+    draw();
+  });
+  journalLogoModeSelect.addEventListener("change", () => {
+    state.journalLogoMode = journalLogoModeSelect.value;
+    hydrateText(getActiveItem());
     draw();
   });
   Object.values(controls).forEach((input) => input.addEventListener("input", syncStateFromDom));
@@ -256,8 +265,9 @@ function getActiveItem() {
 
 function hydrateText(item) {
   const defaults = item.defaults || item.text || {};
+  const logoName = resolveDefaultJournalName(item);
   state.text = {
-    title: defaults.title || item.name || "",
+    title: logoName || defaults.title || item.name || "",
     subtitle: defaults.subtitle || item.summary || "",
     meta: defaults.meta || "SCIENTIFIC STYLE"
   };
@@ -303,6 +313,13 @@ function syncDomFromState() {
   metaInput.value = state.text.meta;
   qualitySelect.value = state.quality;
   debugViewSelect.value = state.debugView;
+  journalLogoModeSelect.value = state.journalLogoMode;
+}
+
+function resolveDefaultJournalName(item) {
+  const logo = item?.params?.logo;
+  if (!logo) return "";
+  return state.journalLogoMode === "creative" ? logo.creative : logo.safe;
 }
 
 function resetTransform() {

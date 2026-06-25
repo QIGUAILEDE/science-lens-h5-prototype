@@ -120,3 +120,20 @@ All derived analysis views are labeled as visual or pseudo analysis, not calibra
 - Add true transparent-card export mode.
 - Add specific shader branches for DIC, polarized, pixel quantization, archive, and heatmap families.
 - Replace grid-superpixel approximation with iterative SLIC while preserving the current parameter-map API.
+
+## Transparent Journal Card Correction
+
+Updated after review:
+
+- Journal cards are now rendered as transparent acrylic viewing cards, not white magazine pages.
+- `drawJournalFrame` no longer draws a white center panel, inner image box, or dense divider lines.
+- The photo remains the base layer; the card only renders outer border, masthead/logo text, sparse metadata, optional footer text, acrylic edge highlight, and weak reflection.
+- J01-J06 now use `layout: "transparent-card"` and explicit `cardCenterBackground: "none"` / `contentAreaFill: 0` configuration.
+- J02 is now a Nature-style blue/yellow campus viewing card: yellow outer border, blue masthead, left/top issue text, minimal footer, and a fully transparent center.
+
+Logo modes:
+
+- `safe`: original substitute mastheads for release, such as `Natural Science Reports`, `Science Reports`, `Cellular Reports`, and `Neural Reports`.
+- `creative`: direct creative masthead names for concept/user mode: `Nature`, `Science`, `Cell`, and `Neuron`.
+
+The UI exposes this as `刊名字标模式`, and recipe saving stores the selected mode.

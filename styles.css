@@ -314,7 +314,8 @@ canvas {
   font-size: 13px;
 }
 
-.text-editor input {
+.text-editor input,
+.text-editor select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;

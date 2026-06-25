@@ -212,73 +212,150 @@ export class ScienceRenderer {
     const ctx = this.ctx;
     const size = this.size;
     const p = template.params || {};
-    const margin = size * 0.06 * (state.cardScale || 1);
+    const margin = size * (p.margin ?? 0.055) * (state.cardScale || 1);
     const x = margin;
     const y = margin;
     const w = size - margin * 2;
     const h = size - margin * 2;
     const border = size * (p.border || 0.035);
     const corner = (p.corner || 14) * (size / 600);
-    const transparent = p.layout === "transparent-card" || p.transparentCard;
-    const masthead = text.title || template.text?.journalName || template.name || "Scientific Journal";
+    const logo = resolveJournalLogo(template, state, text);
     const coverTitle = text.subtitle || template.text?.subtitle || "Visual science issue";
     const issue = text.meta || template.text?.meta || "Vol. 01 / 2026";
     ctx.save();
     ctx.translate(size / 2, size / 2);
     ctx.rotate(((state.cardRotate || 0) * Math.PI) / 180);
     ctx.translate(-size / 2, -size / 2);
-    ctx.shadowColor = "rgba(0,0,0,0.12)";
-    ctx.shadowBlur = size * 0.012;
-    ctx.shadowOffsetY = size * 0.006;
-    roundedRect(ctx, x, y, w, h, corner);
-    ctx.fillStyle = transparent ? "rgba(255,255,255,0.035)" : "rgba(250,249,245,0.9)";
-    ctx.fill();
-    ctx.shadowColor = "transparent";
+
+    ctx.shadowColor = `rgba(0,0,0,${p.shadowOpacity ?? 0.18})`;
+    ctx.shadowBlur = size * (p.shadowBlur ?? 0.018);
+    ctx.shadowOffsetY = size * 0.012;
     ctx.lineWidth = border;
-    ctx.strokeStyle = p.frameColor || "#d12027";
+    ctx.strokeStyle = p.frameColor || p.outerColor || "#d12027";
     roundedRect(ctx, x, y, w, h, corner);
     ctx.stroke();
+    ctx.shadowColor = "transparent";
 
-    const headerY = y + h * 0.065;
-    const headerH = h * (p.header || 0.15);
-    const footerH = h * (p.footer || 0.12);
-    const imageX = x + w * 0.075;
-    const imageY = y + headerH + h * 0.08;
-    const imageW = w * 0.85;
-    const imageH = h - headerH - footerH - h * 0.19;
+    this.drawAcrylicEdge(x, y, w, h, corner, p);
+    if (p.nodes) this.drawSparseNetwork(x, y, w, h, p);
+    if (p.mask) this.drawMicroscopeWindow(x, y, w, h, p);
 
-    ctx.fillStyle = transparent ? "rgba(255,255,255,0.82)" : "rgba(255,255,255,0.78)";
-    if (!transparent) ctx.fillRect(x + w * 0.055, imageY, w * 0.89, imageH);
-    ctx.strokeStyle = p.accentColor || p.frameColor || "#12355b";
-    ctx.lineWidth = Math.max(1.2, size * 0.002);
-    ctx.strokeRect(imageX, imageY, imageW, imageH);
+    const titleX = x + w * (p.titleLeft ?? 0.07);
+    const titleY = y + h * (p.titleTop ?? 0.055);
+    this.drawJournalLogo(logo, p, titleX, titleY, w, h);
 
-    ctx.fillStyle = p.accentColor || p.frameColor || "#102a5c";
-    ctx.font = `${size * (p.mastheadSize || 0.064)}px Georgia, 'Times New Roman', serif`;
-    ctx.textBaseline = "top";
-    ctx.fillText(masthead, x + w * 0.075, headerY);
-    ctx.globalAlpha = 0.9;
+    ctx.globalAlpha = p.metaOpacity ?? 0.82;
+    ctx.fillStyle = p.metaColor || p.accentColor || p.frameColor || "#102a5c";
     ctx.font = `${size * 0.018}px 'SFMono-Regular', Menlo, monospace`;
-    ctx.fillText(issue.toUpperCase(), x + w * 0.075, headerY + headerH * 0.68);
-    ctx.strokeStyle = p.accentColor || p.frameColor || "#102a5c";
-    ctx.globalAlpha = 0.6;
-    ctx.beginPath();
-    ctx.moveTo(x + w * 0.075, y + headerH + h * 0.035);
-    ctx.lineTo(x + w * 0.925, y + headerH + h * 0.035);
-    ctx.stroke();
+    const metaX = x + w * (p.metaLeft ?? 0.07);
+    const metaY = y + h * (p.metaTop ?? 0.155);
+    ctx.fillText(issue.toUpperCase(), metaX, metaY);
 
-    ctx.globalAlpha = 1;
-    const footerY = y + h - footerH - h * 0.035;
-    ctx.fillStyle = transparent ? "rgba(255,255,255,0.74)" : "rgba(255,255,255,0.86)";
-    ctx.fillRect(x + w * 0.075, footerY, w * 0.85, footerH * 0.82);
-    ctx.fillStyle = p.accentColor || p.frameColor || "#102a5c";
-    ctx.font = `700 ${size * 0.025}px Arial, sans-serif`;
-    ctx.fillText(coverTitle, x + w * 0.095, footerY + footerH * 0.17);
-    ctx.font = `${size * 0.016}px Arial, sans-serif`;
-    ctx.globalAlpha = 0.78;
-    ctx.fillText(template.text?.footerNote || "Original publication-style frame / editable masthead", x + w * 0.095, footerY + footerH * 0.52);
+    if (p.footer !== false) {
+      const footerY = y + h * (p.footerTop ?? 0.875);
+      ctx.globalAlpha = p.footerOpacity ?? 0.74;
+      ctx.fillStyle = p.footerColor || p.accentColor || p.frameColor || "#102a5c";
+      ctx.font = `${size * (p.footerSize ?? 0.018)}px Arial, sans-serif`;
+      ctx.fillText(coverTitle, x + w * (p.footerLeft ?? 0.07), footerY);
+      const note = template.text?.footerNote;
+      if (note && p.footerNote !== false) {
+        ctx.globalAlpha *= 0.78;
+        ctx.font = `${size * 0.014}px Arial, sans-serif`;
+        ctx.fillText(note, x + w * (p.footerLeft ?? 0.07), footerY + h * 0.035);
+      }
+    }
 
     this.drawAcrylicHighlight(x, y, w, h, state.reflection ?? 0.5);
+    ctx.restore();
+  }
+
+  drawJournalLogo(logo, p, x, y, w, h) {
+    const ctx = this.ctx;
+    const style = p.logoStyle || "journal";
+    const size = this.size;
+    ctx.save();
+    ctx.globalAlpha = p.logoOpacity ?? 0.94;
+    ctx.fillStyle = p.logoColor || p.accentColor || p.frameColor || "#102a5c";
+    ctx.textBaseline = "top";
+    if (style === "science") {
+      ctx.font = `700 ${size * (p.mastheadSize || 0.078)}px Georgia, 'Times New Roman', serif`;
+      ctx.fillStyle = p.logoColor || "#d12027";
+      ctx.fillText(logo, x, y);
+    } else if (style === "nature") {
+      ctx.font = `700 ${size * (p.mastheadSize || 0.078)}px Georgia, 'Times New Roman', serif`;
+      ctx.fillText(logo, x, y);
+    } else if (style === "cell") {
+      ctx.font = `700 ${size * (p.mastheadSize || 0.06)}px Helvetica, Arial, sans-serif`;
+      ctx.letterSpacing = "0";
+      ctx.fillText(logo, x, y);
+      ctx.globalAlpha *= 0.72;
+      ctx.fillRect(x, y + size * 0.062, Math.min(w * 0.24, size * 0.18), Math.max(2, size * 0.004));
+    } else if (style === "neuron") {
+      ctx.font = `600 ${size * (p.mastheadSize || 0.062)}px 'SF Pro Display', Helvetica, Arial, sans-serif`;
+      ctx.fillText(logo, x, y);
+    } else {
+      ctx.font = `700 ${size * (p.mastheadSize || 0.058)}px Georgia, 'Times New Roman', serif`;
+      ctx.fillText(logo, x, y);
+    }
+    ctx.restore();
+  }
+
+  drawAcrylicEdge(x, y, w, h, corner, p) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.globalAlpha = p.thickness ?? 0.32;
+    ctx.lineWidth = Math.max(1, this.size * 0.003);
+    ctx.strokeStyle = p.edgeHighlight || "rgba(255,255,255,0.62)";
+    roundedRect(ctx, x + ctx.lineWidth * 1.2, y + ctx.lineWidth * 1.2, w - ctx.lineWidth * 2.4, h - ctx.lineWidth * 2.4, corner * 0.88);
+    ctx.stroke();
+    ctx.globalAlpha = (p.thickness ?? 0.32) * 0.55;
+    ctx.strokeStyle = p.edgeShadow || "rgba(0,0,0,0.18)";
+    roundedRect(ctx, x + this.size * 0.007, y + this.size * 0.007, w, h, corner);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  drawSparseNetwork(x, y, w, h, p) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = p.accentColor || "#8c6cff";
+    ctx.fillStyle = p.accentColor || "#8c6cff";
+    ctx.lineWidth = Math.max(1, this.size * 0.0012);
+    const count = Math.min(10, p.nodes || 8);
+    const points = Array.from({ length: count }, (_, index) => [
+      x + w * (0.08 + ((Math.sin(index * 2.1) + 1) / 2) * 0.18),
+      y + h * (0.22 + (index / count) * 0.56)
+    ]);
+    points.forEach((point, index) => {
+      if (index > 0) {
+        ctx.beginPath();
+        ctx.moveTo(points[index - 1][0], points[index - 1][1]);
+        ctx.lineTo(point[0], point[1]);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.arc(point[0], point[1], this.size * 0.004, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  drawMicroscopeWindow(x, y, w, h, p) {
+    const ctx = this.ctx;
+    const radius = Math.min(w, h) * (p.mask || 0.36) * 0.5;
+    const cx = x + w * 0.5;
+    const cy = y + h * 0.53;
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+    ctx.strokeStyle = p.accentColor || p.frameColor || "#54b7ac";
+    ctx.lineWidth = Math.max(2, this.size * 0.006);
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = 0.18;
+    ctx.lineWidth = Math.max(1, this.size * 0.018);
+    ctx.stroke();
     ctx.restore();
   }
 
@@ -325,6 +402,16 @@ export class ScienceRenderer {
     this.analyzer?.clear();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
+}
+
+function resolveJournalLogo(template, state, text) {
+  const logo = template?.params?.logo || {};
+  const safe = logo.safe || template?.text?.title || template?.name || "Scientific Journal";
+  const creative = logo.creative || safe;
+  const defaultName = state?.journalLogoMode === "creative" ? creative : safe;
+  const typed = text?.title || "";
+  if (!typed || typed === template?.text?.title || typed === logo.safe || typed === logo.creative) return defaultName;
+  return typed;
 }
 
 function convertLegacyTemplate(template = {}) {
