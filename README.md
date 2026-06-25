@@ -1,13 +1,16 @@
 # Science Lens H5 Prototype
 
-科研镜头 H5 原型，用于测试 Brightfield、Fluorescence、SEM、GelDoc 等科研视觉滤镜。
+科研镜头 H5 原型，用于测试科学仪器滤镜、科学透明透卡和期刊透明取景卡。
 
 ## Features
 
 - Upload a local image
-- Switch science lens presets
+- Switch 30 science templates across 5 categories
 - Adjust zoom, position, and rotation
-- Render overlays such as scale bars, channel labels, scanlines, and instrument metadata
+- Edit title, subtitle, and metadata text
+- Adjust effect intensity, transparent card scale, card rotation, and glass reflection
+- Compare original image with generated result
+- Render overlays such as microscope masks, scale bars, channel labels, scanlines, specimen cards, acrylic highlights, and journal-style transparent frames
 - Download the generated preview image
 
 ## Files
@@ -15,12 +18,25 @@
 - `index.html`: app shell
 - `styles.css`: mobile-first UI styles
 - `app.js`: Canvas rendering and interactions
+- `science-templates.json`: advanced template presets for filters, overlays, hybrid effects, and journal transparent cards
 - `science-lenses.json`: data-driven science lens presets
 - `science-lenses.config.ts`: typed preset reference for future app development
 
 ## Notes
 
 This is a visual simulation prototype, not a scientific measurement tool.
+
+## Advanced Prototype Scope
+
+Implemented template groups:
+
+- Microscope field templates
+- Fluorescence and electron imaging templates
+- Staining and transparent light templates
+- Scientific information card templates
+- Journal transparent viewfinder cards
+
+The current rendering engine is Canvas 2D first. Some complex effects, such as liquify distortion, color diffusion, confocal layer separation, and refraction, are implemented as lightweight visual approximations. They are intentionally marked in `science-templates.json` as `canvas2d-now-webgl-later` when they should eventually move to WebGL shaders.
 
 ## Git Sync Policy
 

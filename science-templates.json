@@ -1,0 +1,343 @@
+{
+  "schemaVersion": "2.0.0",
+  "categories": [
+    { "id": "microscope", "name": "显微镜视场" },
+    { "id": "fluoro-electron", "name": "荧光与电子显像" },
+    { "id": "stain-light", "name": "染色与透明光影" },
+    { "id": "info-card", "name": "科学图形与信息透卡" },
+    { "id": "journal", "name": "期刊透明取景卡" }
+  ],
+  "templates": [
+    {
+      "id": "m01_black_circle_brightfield",
+      "index": "01",
+      "name": "黑圈明场观察",
+      "category": "microscope",
+      "type": "overlay",
+      "engine": "canvas2d",
+      "summary": "圆形明亮视场、黑色外圈、白色标本字幕。",
+      "params": { "exposure": 0.08, "contrast": 0.96, "saturation": 0.9, "mask": 0.78, "feather": 18, "vignette": 0.18, "glow": 0.12 },
+      "text": { "title": "南瓜茎横切", "subtitle": "Bright Field / 40×", "meta": "Sample 013  2026.06.25" },
+      "controls": ["mask", "feather", "glow", "vignette"]
+    },
+    {
+      "id": "m02_cyan_stained_slice",
+      "index": "02",
+      "name": "染色切片青绿系",
+      "category": "stain-light",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "淡青染色、乳白玻片背景、柔焦和细颗粒。",
+      "params": { "exposure": 0.1, "contrast": 0.92, "saturation": 0.88, "tint": "#70d7cf", "tintMix": 0.34, "grain": 0.04, "soft": 0.16 },
+      "text": { "title": "Cyan Stained Slice", "subtitle": "Leaf / Tissue Texture", "meta": "BF stain" }
+    },
+    {
+      "id": "m03_magenta_mitosis",
+      "index": "03",
+      "name": "紫红染色分裂相",
+      "category": "stain-light",
+      "type": "hybrid",
+      "engine": "canvas2d",
+      "summary": "冷白玻片底、紫红染色体短线、高光雾化。",
+      "params": { "exposure": 0.22, "contrast": 0.92, "saturation": 0.82, "tint": "#b945b5", "tintMix": 0.38, "soft": 0.12, "speckles": 18 },
+      "text": { "title": "L-013", "subtitle": "HE 染色", "meta": "2026.06.25" }
+    },
+    {
+      "id": "m04_electron_funhouse",
+      "index": "04",
+      "name": "电子显像哈哈镜",
+      "category": "fluoro-electron",
+      "type": "filter",
+      "engine": "canvas2d-now-webgl-later",
+      "summary": "黑场、青紫伪彩、边缘发光和局部形变感。",
+      "params": { "exposure": -0.08, "contrast": 1.55, "saturation": 1.35, "blackPoint": 0.28, "duotone": ["#00f0c8", "#ff4fd8"], "glow": 0.42, "colorNoise": 0.08, "scanline": 0.02 },
+      "text": { "title": "Electron Funhouse", "subtitle": "Organic Distortion", "meta": "Pseudo EM" }
+    },
+    {
+      "id": "m05_polarized_crystal",
+      "index": "05",
+      "name": "偏光彩染晶体",
+      "category": "stain-light",
+      "type": "hybrid",
+      "engine": "canvas2d",
+      "summary": "偏光显微镜般的红橙、青绿、蓝紫叠色和晶体纹理。",
+      "params": { "exposure": 0.05, "contrast": 1.08, "saturation": 1.28, "crystal": 0.35, "dispersion": 0.08, "vignette": 0.2, "glow": 0.14 },
+      "text": { "title": "Polarized Crystal", "subtitle": "Cross Polarized", "meta": "PLM" }
+    },
+    {
+      "id": "m06_chloroplast_collage",
+      "index": "06",
+      "name": "叶绿体拼贴观察",
+      "category": "info-card",
+      "type": "hybrid",
+      "engine": "canvas2d",
+      "summary": "多视野拼贴、绿色胞体、浅灰显微镜背景。",
+      "params": { "exposure": 0.02, "contrast": 0.98, "saturation": 1.18, "tint": "#74b943", "tintMix": 0.2, "collage": 6, "grain": 0.03 },
+      "text": { "title": "Chloroplast Field", "subtitle": "Freshwater micro view", "meta": "Grid 6" }
+    },
+    {
+      "id": "m07_low_contrast_brightfield",
+      "index": "07",
+      "name": "浅白明场低对比",
+      "category": "microscope",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "高曝光白底、淡结构线、粉紫核点和玻片痕迹。",
+      "params": { "exposure": 0.28, "contrast": 0.78, "saturation": 0.75, "blackPoint": -0.12, "soft": 0.25, "tint": "#f1eef1", "tintMix": 0.25, "speckles": 10 },
+      "text": { "title": "Low Contrast BF", "subtitle": "Pale specimen", "meta": "Bright field" }
+    },
+    {
+      "id": "m08_droplet_microbes",
+      "index": "08",
+      "name": "水滴微生物观察",
+      "category": "microscope",
+      "type": "overlay",
+      "engine": "canvas2d",
+      "summary": "透明液滴、局部放大折射、漂浮颗粒。",
+      "params": { "exposure": 0.02, "contrast": 1.03, "saturation": 0.95, "droplets": 12, "refraction": 0.12, "grain": 0.02 },
+      "text": { "title": "Droplet Microbes", "subtitle": "Water sample", "meta": "Wet mount" }
+    },
+    {
+      "id": "m09_captioned_black_circle",
+      "index": "09",
+      "name": "黑圈标本字幕版",
+      "category": "microscope",
+      "type": "overlay",
+      "engine": "canvas2d",
+      "summary": "黑圈显微镜视场，增加日期、时间、倍率和样本编号。",
+      "params": { "exposure": 0.05, "contrast": 1.02, "saturation": 0.92, "mask": 0.82, "feather": 20, "vignette": 0.24, "captionBar": 0.12 },
+      "text": { "title": "水绵节间细胞标本", "subtitle": "2026/06/25  10:25  40×", "meta": "Sample BF-009" }
+    },
+    {
+      "id": "m10_green_magenta_fluoro",
+      "index": "10",
+      "name": "绿紫双通道荧光",
+      "category": "fluoro-electron",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "绿色纤维网络、紫色信号点、黑背景和发亮轮廓。",
+      "params": { "exposure": -0.1, "contrast": 1.7, "saturation": 1.35, "blackPoint": 0.24, "duotone": ["#15ff69", "#b929ff"], "glow": 0.55, "speckles": 32 },
+      "text": { "title": "GFP / Magenta", "subtitle": "Merged channels", "meta": "488 nm + 561 nm" }
+    },
+    {
+      "id": "m11_phase_halo",
+      "index": "11",
+      "name": "相差光晕模式",
+      "category": "microscope",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "灰蓝单色、边缘光晕、细节轻浮雕。",
+      "params": { "exposure": 0.08, "contrast": 1.18, "saturation": 0.55, "tint": "#a9c9df", "tintMix": 0.42, "halo": 0.18, "soft": 0.08 },
+      "text": { "title": "Phase Contrast", "subtitle": "Halo mode", "meta": "PH 40×" }
+    },
+    {
+      "id": "m12_darkfield_sparkle",
+      "index": "12",
+      "name": "暗场闪烁颗粒",
+      "category": "fluoro-electron",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "纯黑背景、蓝紫亮点、星芒和高反差颗粒。",
+      "params": { "exposure": -0.12, "contrast": 1.85, "saturation": 1.3, "blackPoint": 0.36, "sparkles": 18, "colorNoise": 0.07, "glow": 0.28 },
+      "text": { "title": "Dark Field", "subtitle": "Sparkle particles", "meta": "DF" }
+    },
+    {
+      "id": "m13_pathology_slide",
+      "index": "13",
+      "name": "冷白病理玻片",
+      "category": "microscope",
+      "type": "overlay",
+      "engine": "canvas2d",
+      "summary": "透明玻片边框、左侧样本标签、二维码装饰。",
+      "params": { "exposure": 0.14, "contrast": 0.9, "saturation": 0.82, "slide": 0.8, "shadow": 0.06, "labelWidth": 0.18 },
+      "text": { "title": "Sample L-013", "subtitle": "HE 染色", "meta": "2026-06-25" }
+    },
+    {
+      "id": "m14_confocal_zstack",
+      "index": "14",
+      "name": "共聚焦层析伪彩",
+      "category": "fluoro-electron",
+      "type": "filter",
+      "engine": "canvas2d-now-webgl-later",
+      "summary": "紫、青、蓝多层轮廓错位，黑底局部纤维发光。",
+      "params": { "exposure": -0.08, "contrast": 1.6, "saturation": 1.4, "blackPoint": 0.3, "duotone": ["#39e8ff", "#d457ff"], "glow": 0.5, "layers": 5 },
+      "text": { "title": "Confocal Z-stack", "subtitle": "Pseudo layer merge", "meta": "Z 12/48" }
+    },
+    {
+      "id": "m15_cell_star_map",
+      "index": "15",
+      "name": "微观细胞星图",
+      "category": "info-card",
+      "type": "overlay",
+      "engine": "canvas2d",
+      "summary": "亮点转成细胞节点，半透明线网和编号注释。",
+      "params": { "exposure": 0.04, "contrast": 0.96, "saturation": 0.82, "nodes": 24, "lineOpacity": 0.35, "grain": 0.02 },
+      "text": { "title": "Cell Star Map", "subtitle": "Node analysis", "meta": "D-02 / D-13" }
+    },
+    {
+      "id": "m16_silver_sem",
+      "index": "16",
+      "name": "银灰扫描电镜",
+      "category": "fluoro-electron",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "银灰黑白、高纹理、高对比、扫描电镜状态栏。",
+      "params": { "exposure": -0.04, "contrast": 1.65, "saturation": 0, "grayscale": true, "grain": 0.08, "scanline": 0.05, "texture": 0.3, "vignette": 0.12 },
+      "text": { "title": "SEM", "subtitle": "Mag 3000×  HV 5.0 kV  WD 8.2 mm", "meta": "SE Detector" }
+    },
+    {
+      "id": "m17_blue_xray",
+      "index": "17",
+      "name": "透照底片蓝版",
+      "category": "stain-light",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "蓝白透照、局部反相、冷色仪器光。",
+      "params": { "exposure": 0.12, "contrast": 1.14, "saturation": 0.72, "invertMix": 0.3, "tint": "#5c94dd", "tintMix": 0.45, "soft": 0.12 },
+      "text": { "title": "Blue Transillumination", "subtitle": "Negative plate", "meta": "70 kVp style" }
+    },
+    {
+      "id": "m18_specimen_archive",
+      "index": "18",
+      "name": "玻片档案信息卡",
+      "category": "info-card",
+      "type": "overlay",
+      "engine": "canvas2d",
+      "summary": "实验室或博物馆标本档案，含学名、日期、倍率和比例尺。",
+      "params": { "exposure": 0.05, "contrast": 1, "saturation": 0.92, "card": 0.82, "infoBar": 0.28, "corner": 16 },
+      "text": { "title": "虎耳草", "subtitle": "Saxifraga stolonifera", "meta": "40×  100 μm  2026.06.25" }
+    },
+    {
+      "id": "m19_microfluidic_cyan",
+      "index": "19",
+      "name": "微流控通道青蓝",
+      "category": "info-card",
+      "type": "hybrid",
+      "engine": "canvas2d",
+      "summary": "青蓝通道、圆形反应腔、液滴节点和芯片线路网格。",
+      "params": { "exposure": 0.06, "contrast": 1.08, "saturation": 1.05, "tint": "#32cddd", "tintMix": 0.24, "channels": 16, "refraction": 0.12 },
+      "text": { "title": "Microfluidic", "subtitle": "Channel map", "meta": "Flow chip" }
+    },
+    {
+      "id": "m20_translucent_dreamcore",
+      "index": "20",
+      "name": "透明彩染梦核",
+      "category": "stain-light",
+      "type": "hybrid",
+      "engine": "canvas2d",
+      "summary": "粉蓝紫橙柔和染色、浮动光斑和彩虹色散。",
+      "params": { "exposure": 0.12, "contrast": 1.02, "saturation": 1.16, "dream": 0.32, "soft": 0.22, "dispersion": 0.1, "sparkles": 12 },
+      "text": { "title": "Translucent Dream", "subtitle": "Soft stain", "meta": "Light field" }
+    },
+    {
+      "id": "m21_polar_fluid_bloom",
+      "index": "21",
+      "name": "偏光流体晕染",
+      "category": "stain-light",
+      "type": "filter",
+      "engine": "canvas2d-now-webgl-later",
+      "summary": "提取照片自身颜色，做染液扩散、柔光和边缘色散。",
+      "params": { "exposure": 0.03, "contrast": 1.05, "saturation": 1.16, "fluid": 0.42, "hueShift": 0.1, "soft": 0.18, "dispersion": 0.12, "crystal": 0.15 },
+      "text": { "title": "Polar Fluid Bloom", "subtitle": "Color diffusion", "meta": "HSV spread" }
+    },
+    {
+      "id": "m22_pixel_cell_blocks",
+      "index": "22",
+      "name": "低像素细胞色块",
+      "category": "info-card",
+      "type": "filter",
+      "engine": "canvas2d",
+      "summary": "主色抽象、低像素组织切片、色块边界和图例。",
+      "params": { "exposure": 0.02, "contrast": 1.02, "saturation": 1.08, "pixel": 16, "palette": 8, "edge": 0.18, "grain": 0.02 },
+      "text": { "title": "Cell Blocks", "subtitle": "8 color tissue map", "meta": "Palette legend" }
+    },
+    {
+      "id": "j01_red_science_view",
+      "index": "J01",
+      "name": "红框科学期刊取景卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "红色细边框、顶部刊名、中央透明取景。",
+      "params": { "border": 0.05, "corner": 16, "header": 0.15, "reflection": 0.12, "shadow": 0.16, "glass": 0.08, "frameColor": "#d12027", "accentColor": "#d12027" },
+      "text": { "title": "SCIENCE VIEW", "subtitle": "A transparent frame for daily experiments", "meta": "Vol. 01 / 2026" }
+    },
+    {
+      "id": "j02_nature_campus",
+      "index": "J02",
+      "name": "蓝黄自然期刊校园卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "黄色外框、深蓝信息栏、适合蓝天校园场景。",
+      "params": { "border": 0.04, "corner": 14, "header": 0.12, "reflection": 0.1, "shadow": 0.14, "glass": 0.15, "frameColor": "#f0c94b", "accentColor": "#102a5c", "innerColor": "#102a5c" },
+      "text": { "title": "NATURE VIEW", "subtitle": "Field notes from campus", "meta": "2026 / Issue 06" }
+    },
+    {
+      "id": "j03_cell_minimal",
+      "index": "J03",
+      "name": "生命科学极简透卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "极细边框、小型刊名、醒目的生命科学色块。",
+      "params": { "border": 0.022, "corner": 10, "header": 0.1, "reflection": 0.08, "shadow": 0.1, "glass": 0.08, "frameColor": "#111111", "accentColor": "#ef3b2d" },
+      "text": { "title": "CELLULAR", "subtitle": "Life under observation", "meta": "Volume 12 / June" }
+    },
+    {
+      "id": "j04_neural_network",
+      "index": "J04",
+      "name": "神经网络期刊透卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "深紫边框、边缘神经网络线条、中央保留透明。",
+      "params": { "border": 0.032, "corner": 14, "header": 0.12, "reflection": 0.1, "shadow": 0.18, "glass": 0.12, "frameColor": "#21164f", "accentColor": "#8c6cff", "nodes": 14 },
+      "text": { "title": "NEURAL", "subtitle": "Network / Signals / Memory", "meta": "2026.06" }
+    },
+    {
+      "id": "j05_microscopy_journal",
+      "index": "J05",
+      "name": "显微镜期刊复合透卡",
+      "category": "journal",
+      "type": "journal-hybrid",
+      "engine": "canvas2d",
+      "summary": "期刊外框和圆形显微镜视场组合。",
+      "params": { "border": 0.035, "corner": 14, "header": 0.12, "footer": 0.1, "mask": 0.72, "feather": 15, "reflection": 0.11, "frameColor": "#0b2533", "accentColor": "#54b7ac" },
+      "text": { "title": "MICROSCOPY", "subtitle": "Pumpkin Stem Cross Section", "meta": "40×  Bright Field  Sample 013" }
+    },
+    {
+      "id": "j06_preprint_card",
+      "index": "J06",
+      "name": "实验室预印本透卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "磨砂白透明外框、PREPRINT、版本号和底部作者信息。",
+      "params": { "border": 0.04, "corner": 12, "header": 0.1, "reflection": 0.08, "shadow": 0.12, "glass": 0.18, "frameColor": "#f5f1e8", "accentColor": "#232323" },
+      "text": { "title": "PREPRINT", "subtitle": "How to escape the lab on Friday afternoon", "meta": "Version 1 / Under Review" }
+    },
+    {
+      "id": "j07_graduation_issue",
+      "index": "J07",
+      "name": "毕业纪念期刊透卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "金属高光、Graduation Issue、学校学院和纪念文案。",
+      "params": { "border": 0.04, "corner": 12, "header": 0.13, "footer": 0.1, "reflection": 0.14, "shadow": 0.18, "glass": 0.12, "frameColor": "#c79d45", "accentColor": "#12355b" },
+      "text": { "title": "GRADUATION ISSUE", "subtitle": "Class of 2026 / The Final Experiment", "meta": "Finally Accepted" }
+    },
+    {
+      "id": "j08_free_journal",
+      "index": "J08",
+      "name": "自由刊名生成卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "自由刊名、主色、卷期和透明取景框。",
+      "params": { "border": 0.035, "corner": 16, "header": 0.12, "reflection": 0.11, "shadow": 0.16, "glass": 0.1, "frameColor": "#2f8f89", "accentColor": "#7f6bc9" },
+      "text": { "title": "LAB LIFE", "subtitle": "Scientific daily transparent card", "meta": "Vol. 01 / Issue 01" }
+    }
+  ]
+}

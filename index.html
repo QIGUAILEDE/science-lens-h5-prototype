@@ -10,13 +10,16 @@
     <main class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Science Lens Prototype</p>
-          <h1>科研镜头</h1>
+          <p class="eyebrow">Science Lens Advanced Prototype</p>
+          <h1>科研镜头实验台</h1>
         </div>
-        <label class="upload-button">
-          <input id="fileInput" type="file" accept="image/*" />
-          上传图片
-        </label>
+        <div class="top-actions">
+          <button id="compareButton" type="button" aria-pressed="false">原图</button>
+          <label class="upload-button">
+            <input id="fileInput" type="file" accept="image/*" />
+            上传图片
+          </label>
+        </div>
       </header>
 
       <section class="stage-card">
@@ -29,13 +32,35 @@
 
       <section class="controls">
         <div>
-          <h2>镜头</h2>
+          <div class="section-heading">
+            <h2>模板库</h2>
+            <span id="templateCount"></span>
+          </div>
+          <div id="categoryTabs" class="category-tabs" aria-label="模板分类"></div>
           <div id="lensList" class="lens-list"></div>
+        </div>
+
+        <article id="templateInfo" class="template-info"></article>
+
+        <div class="text-editor">
+          <h2>文字</h2>
+          <label>
+            主标题
+            <input id="titleInput" type="text" maxlength="32" />
+          </label>
+          <label>
+            副标题 / 样本名
+            <input id="subtitleInput" type="text" maxlength="48" />
+          </label>
+          <label>
+            日期 / 卷期
+            <input id="metaInput" type="text" maxlength="48" />
+          </label>
         </div>
 
         <div class="control-grid">
           <label>
-            缩放
+            图片缩放
             <input id="zoomRange" type="range" min="0.5" max="3" value="1" step="0.01" />
           </label>
           <label>
@@ -49,6 +74,22 @@
           <label>
             旋转
             <input id="rotationRange" type="range" min="-180" max="180" value="0" step="1" />
+          </label>
+          <label>
+            效果强度
+            <input id="intensityRange" type="range" min="0" max="1.5" value="1" step="0.01" />
+          </label>
+          <label>
+            透卡缩放
+            <input id="cardScaleRange" type="range" min="0.7" max="1.25" value="1" step="0.01" />
+          </label>
+          <label>
+            透卡旋转
+            <input id="cardRotateRange" type="range" min="-14" max="14" value="0" step="0.1" />
+          </label>
+          <label>
+            玻璃反光
+            <input id="reflectionRange" type="range" min="0" max="1" value="0.5" step="0.01" />
           </label>
         </div>
 
