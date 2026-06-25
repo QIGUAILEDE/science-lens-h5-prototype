@@ -202,7 +202,7 @@ function renderInfo() {
     <p>${item.summary || item.recommended || ""}</p>
     <div class="meta-row">
       <span class="pill">${item.type || "template"}</span>
-      <span class="pill">${item.family || item.category || "canvas2d"}</span>
+      <span class="pill">${item.engine || item.family || item.category || "canvas2d"}</span>
       <span class="pill">${item.frame?.metadata || "SIMULATED"}</span>
     </div>
   `;
@@ -366,4 +366,3 @@ startApp().catch((error) => {
   console.error(error);
   emptyState.innerHTML = "<strong>初始化失败</strong><span>请检查浏览器是否支持 ES Modules，并通过本地服务器或 GitHub Pages 打开。</span>";
 });
-

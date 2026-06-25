@@ -163,8 +163,30 @@ Multi-image import is not implemented yet; current panels are structural placeho
 - EXIF orientation correction is not implemented yet.
 - Real multi-image Research-Figure import is not implemented yet.
 - True high-resolution re-render is scaffolded by quality presets but still uses one canvas path.
-- WebGL shader pass files are planned, not implemented.
+- WebGL shader pass is now implemented for the first four science cameras, with Canvas 2D fallback.
 - Transparent PNG export for standalone frames is schema-ready but not exposed in UI.
+
+## WebGL Shader Upgrade
+
+Added `src/imaging/shaders/webgl-science-pass.js`.
+
+The shader computes analysis signals directly from the source texture:
+
+- luminance map
+- low-frequency smooth map
+- Difference-of-Gaussians-style detail signal
+- edge / gradient map
+- highlight mask
+- dark mask
+
+Per camera behavior:
+
+- PH-Live: uses DoG positive and negative halos aligned to real image edges.
+- FL-Duo: maps smooth subject structure to green and high-frequency detail/edge signal to magenta.
+- SEM-Carbon: computes a surface-normal-like gradient and directional light for SEM relief.
+- Diffusion-Stain: uses smooth structure, local detail, and two stain colors for structure-aware diffusion.
+
+The shader output is followed by Canvas overlay rendering for metadata, microscope mask, cards, and text. If WebGL is unavailable, the renderer automatically falls back to the Canvas 2D passes.
 
 ## Acceptance Checklist
 

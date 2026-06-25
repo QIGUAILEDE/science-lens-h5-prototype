@@ -5,6 +5,7 @@ export const SCIENCE_CAMERAS = [
     name: "PH-Live 活细胞相差镜",
     category: "光学显微",
     type: "science-camera",
+    engine: "webgl-shader",
     family: "phase",
     summary: "灰蓝低饱和、透明样品边缘明暗光环、显微玻片质感。",
     recommended: "人物、宠物、食物、透明物、日常物体",
@@ -21,6 +22,7 @@ export const SCIENCE_CAMERAS = [
     name: "FL-Duo 绿紫双通道荧光镜",
     category: "荧光成像",
     type: "science-camera",
+    engine: "webgl-shader",
     family: "fluorescence",
     summary: "黑场扣除、结构通道映射绿色、细节通道映射紫色，带 Bloom 与点状信号。",
     recommended: "人像轮廓、宠物、花束、树枝、夜景",
@@ -41,6 +43,7 @@ export const SCIENCE_CAMERAS = [
     name: "SEM-Carbon 扫描电子显微镜",
     category: "电子显微",
     type: "science-camera",
+    engine: "webgl-shader",
     family: "electron",
     summary: "冷灰黑白、高频纹理增强、微弱扫描纹理和电子显微镜参数栏。",
     recommended: "建筑、机械、毛发、树皮、布料、食物表面",
@@ -57,6 +60,7 @@ export const SCIENCE_CAMERAS = [
     name: "Diffusion-Stain 晕染染色",
     category: "数据伪彩",
     type: "science-camera",
+    engine: "webgl-shader",
     family: "stain",
     summary: "保留亮度结构，用粉蓝/绿紫染液感做区域扩散和玻片质感。",
     recommended: "花朵、食物、衣物、玻璃、晚霞、人像",
@@ -109,4 +113,3 @@ export const SCIENCE_CAMERAS = [
     defaults: { title: "Research Figure", subtitle: "Multi-panel scientific plate", meta: "PLANNED" }
   }
 ];
-

@@ -40,6 +40,8 @@ Implemented template groups:
 
 The current rendering engine is Canvas 2D first. Some complex effects, such as liquify distortion, color diffusion, confocal layer separation, and refraction, are implemented as lightweight visual approximations. They are intentionally marked in `science-templates.json` as `canvas2d-now-webgl-later` when they should eventually move to WebGL shaders.
 
+The first WebGL shader pass is now available for the four flagship science cameras: PH-Live, FL-Duo, SEM-Carbon, and Diffusion-Stain. Other cards and legacy templates continue to use the Canvas 2D fallback path.
+
 ## Git Sync Policy
 
 For this project, major updates should be committed and pushed to GitHub by default.

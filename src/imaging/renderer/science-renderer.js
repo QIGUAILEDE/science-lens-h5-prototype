@@ -3,12 +3,19 @@ import { applyToneAndChannels } from "../passes/color-pass.js";
 import { applyStructurePass } from "../passes/structure-pass.js";
 import { applySensorNoise } from "../passes/noise-pass.js";
 import { applyOptics, drawMicroscopeMask } from "../passes/optics-pass.js";
+import { WebGLSciencePass } from "../shaders/webgl-science-pass.js";
 
 export class ScienceRenderer {
   constructor(canvas, options = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d", { willReadFrequently: true });
     this.size = options.size || 1200;
+    try {
+      this.webglPass = new WebGLSciencePass();
+    } catch (error) {
+      console.warn("WebGL science pass unavailable, using Canvas fallback.", error);
+      this.webglPass = null;
+    }
   }
 
   resize(size) {
@@ -47,6 +54,15 @@ export class ScienceRenderer {
   }
 
   renderScienceCamera(style, state, text) {
+    const webglResult = this.webglPass?.render(this.canvas, style, state);
+    if (webglResult) {
+      this.ctx.clearRect(0, 0, this.size, this.size);
+      this.ctx.drawImage(webglResult, 0, 0, this.size, this.size);
+      applyOptics(this.ctx, { ...style, optics: { ...(style.optics || {}), bloom: 0, vignette: 0, scanline: 0 } }, state, this.size);
+      this.drawScienceMetadata(style, text);
+      return;
+    }
+
     const imageData = this.ctx.getImageData(0, 0, this.size, this.size);
     applyToneAndChannels(imageData, style, state);
     applyStructurePass(imageData, style, state);
@@ -176,6 +192,7 @@ export class ScienceRenderer {
   }
 
   dispose() {
+    this.webglPass?.dispose();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }
@@ -220,4 +237,3 @@ function convertLegacyTemplate(template = {}) {
     frame: { metadata: "SCIENTIFIC STYLE / SIMULATED" }
   };
 }
-
