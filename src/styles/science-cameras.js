@@ -1,0 +1,112 @@
+export const SCIENCE_CAMERAS = [
+  {
+    id: "PH_LIVE_01",
+    index: "PH-20",
+    name: "PH-Live 活细胞相差镜",
+    category: "光学显微",
+    type: "science-camera",
+    family: "phase",
+    summary: "灰蓝低饱和、透明样品边缘明暗光环、显微玻片质感。",
+    recommended: "人物、宠物、食物、透明物、日常物体",
+    tone: { exposure: 0.08, contrast: 1.08, gamma: 0.94, saturation: 0.45, blackLevel: -0.05 },
+    structure: { method: "dog-halo", amount: 0.42 },
+    optics: { field: "microscope-circle", coverage: 0.84, vignette: 0.18, dust: 0.08, bloom: 0.04 },
+    sensor: { readNoise: 0.012, shotNoise: 0.018, fixedPatternNoise: 0.002, hotPixels: 0 },
+    frame: { showScale: false, metadata: "SIMULATED PHASE VIEW" },
+    defaults: { title: "PH-Live", subtitle: "Live cell phase contrast look", meta: "SIMULATED VIEW" }
+  },
+  {
+    id: "FL_DUO_01",
+    index: "FL-Duo",
+    name: "FL-Duo 绿紫双通道荧光镜",
+    category: "荧光成像",
+    type: "science-camera",
+    family: "fluorescence",
+    summary: "黑场扣除、结构通道映射绿色、细节通道映射紫色，带 Bloom 与点状信号。",
+    recommended: "人像轮廓、宠物、花束、树枝、夜景",
+    tone: { exposure: -0.24, contrast: 1.28, gamma: 0.9, saturation: 1, blackLevel: 0.2 },
+    channels: [
+      { id: "A", source: "structure", color: "#42FF78", intensity: 0.86, threshold: 0.2 },
+      { id: "B", source: "detail", color: "#C44BFF", intensity: 0.72, threshold: 0.28 }
+    ],
+    structure: { method: "dual-mask", amount: 0.35 },
+    optics: { bloom: 0.2, vignette: 0.1, chromaticShift: 0.002, dust: 0.03 },
+    sensor: { readNoise: 0.015, shotNoise: 0.04, fixedPatternNoise: 0.004, hotPixels: 0.001 },
+    frame: { showScale: false, metadata: "VISUAL PSEUDO-COLOR / NO CALIBRATION" },
+    defaults: { title: "FL-Duo", subtitle: "Channel A Green / Channel B Violet", meta: "VISUAL PSEUDO-COLOR" }
+  },
+  {
+    id: "SEM_CARBON_01",
+    index: "SEM-C",
+    name: "SEM-Carbon 扫描电子显微镜",
+    category: "电子显微",
+    type: "science-camera",
+    family: "electron",
+    summary: "冷灰黑白、高频纹理增强、微弱扫描纹理和电子显微镜参数栏。",
+    recommended: "建筑、机械、毛发、树皮、布料、食物表面",
+    tone: { exposure: -0.06, contrast: 1.55, gamma: 0.88, saturation: 0, blackLevel: 0.08 },
+    structure: { method: "multi-scale-surface", amount: 0.72 },
+    optics: { vignette: 0.16, scanline: 0.05, bloom: 0.03 },
+    sensor: { readNoise: 0.025, shotNoise: 0.018, fixedPatternNoise: 0.01, hotPixels: 0.0003 },
+    frame: { showScale: false, metadata: "SEM-C  HV 5.0kV  WD 8.2mm  SIMULATED SCALE" },
+    defaults: { title: "SEM-Carbon", subtitle: "HV 5.0kV  WD 8.2mm  SE", meta: "SIMULATED SCALE" }
+  },
+  {
+    id: "DIFFUSION_STAIN_01",
+    index: "DS-01",
+    name: "Diffusion-Stain 晕染染色",
+    category: "数据伪彩",
+    type: "science-camera",
+    family: "stain",
+    summary: "保留亮度结构，用粉蓝/绿紫染液感做区域扩散和玻片质感。",
+    recommended: "花朵、食物、衣物、玻璃、晚霞、人像",
+    tone: { exposure: 0.06, contrast: 1.02, gamma: 0.98, saturation: 1.12, blackLevel: -0.02 },
+    stain: { primary: "#d980c5", secondary: "#6dd6e8", diffusion: 0.42 },
+    structure: { method: "soft-edge", amount: 0.18 },
+    optics: { bloom: 0.08, vignette: 0.06, dust: 0.04 },
+    sensor: { readNoise: 0.008, shotNoise: 0.012, fixedPatternNoise: 0.001, hotPixels: 0 },
+    frame: { showScale: false, metadata: "VISUAL STAIN MAP" },
+    defaults: { title: "Diffusion-Stain", subtitle: "Soft tissue stain look", meta: "VISUAL STAIN MAP" }
+  },
+  {
+    id: "DIC_RELIEF_01",
+    index: "DIC-R",
+    name: "DIC-Relief 微分浮雕镜",
+    category: "光学显微",
+    type: "planned-camera",
+    family: "dic",
+    summary: "方向梯度浮雕、青灰/金属灰背景，下一轮接入 shader pass。",
+    defaults: { title: "DIC-Relief", subtitle: "Directional relief preview", meta: "PLANNED" }
+  },
+  {
+    id: "POL_CRYSTAL_01",
+    index: "POL-X",
+    name: "POL-Crystal 偏振晶体镜",
+    category: "数据伪彩",
+    type: "planned-camera",
+    family: "polarized",
+    summary: "梯度方向映射虹彩色相，下一轮接入偏振 shader。",
+    defaults: { title: "POL-Crystal", subtitle: "Polarized crystal preview", meta: "PLANNED" }
+  },
+  {
+    id: "PIXEL_SAMPLE_01",
+    index: "PX-S",
+    name: "Pixel-Sample 低像素样本",
+    category: "数据伪彩",
+    type: "planned-camera",
+    family: "pixel",
+    summary: "方格像素、色块量化和超像素组织，已有旧模板可验证。",
+    defaults: { title: "Pixel-Sample", subtitle: "Segmented color blocks", meta: "PLANNED" }
+  },
+  {
+    id: "JOURNAL_PLATE_01",
+    index: "FIG-4",
+    name: "Journal-Plate 论文 Figure",
+    category: "科学档案",
+    type: "planned-camera",
+    family: "figure",
+    summary: "已拆分为 Journal-Frame 与 Research-Figure 两个模块。",
+    defaults: { title: "Research Figure", subtitle: "Multi-panel scientific plate", meta: "PLANNED" }
+  }
+];
+

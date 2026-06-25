@@ -36,6 +36,11 @@
             <h2>模板库</h2>
             <span id="templateCount"></span>
           </div>
+          <div id="workspaceTabs" class="workspace-tabs" aria-label="工作区">
+            <button type="button" data-workspace="cameras" aria-pressed="true">科学镜头</button>
+            <button type="button" data-workspace="cards" aria-pressed="false">科学透卡</button>
+            <button type="button" data-workspace="figures" aria-pressed="false">论文 Figure</button>
+          </div>
           <div id="categoryTabs" class="category-tabs" aria-label="模板分类"></div>
           <div id="lensList" class="lens-list"></div>
         </div>
@@ -96,10 +101,24 @@
         <div class="actions">
           <button id="resetButton" type="button">重置图片</button>
           <button id="downloadButton" type="button">下载预览图</button>
+          <button id="saveRecipeButton" type="button">保存配方</button>
+          <button id="loadRecipeButton" type="button">应用配方</button>
+        </div>
+
+        <div class="export-settings">
+          <h2>导出</h2>
+          <label>
+            质量档位
+            <select id="qualitySelect">
+              <option value="smooth">流畅 2048px</option>
+              <option value="standard" selected>标准 3072px</option>
+              <option value="high">高清 4096px</option>
+            </select>
+          </label>
         </div>
       </section>
     </main>
 
-    <script src="./app.js"></script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

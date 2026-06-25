@@ -17,10 +17,12 @@
 
 - `index.html`: app shell
 - `styles.css`: mobile-first UI styles
-- `app.js`: Canvas rendering and interactions
+- `app.js`: ES module entrypoint
+- `src/`: modular imaging engine, science cameras, templates, and preset services
 - `science-templates.json`: advanced template presets for filters, overlays, hybrid effects, and journal transparent cards
 - `science-lenses.json`: data-driven science lens presets
 - `science-lenses.config.ts`: typed preset reference for future app development
+- `p0-upgrade-report.md`: current P0 architecture and acceptance notes
 
 ## Notes
 

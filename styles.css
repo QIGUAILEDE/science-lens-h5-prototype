@@ -176,6 +176,26 @@ canvas {
   scrollbar-width: none;
 }
 
+.workspace-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.workspace-tabs button {
+  padding: 9px 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.workspace-tabs button[aria-pressed="true"] {
+  color: #06110e;
+  background: var(--accent);
+  border-color: transparent;
+  font-weight: 700;
+}
+
 .category-tabs::-webkit-scrollbar {
   display: none;
 }
@@ -316,7 +336,7 @@ input[type="range"] {
 
 .actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -325,6 +345,27 @@ input[type="range"] {
   background: var(--accent-2);
   border-color: transparent;
   font-weight: 700;
+}
+
+.export-settings {
+  display: grid;
+  gap: 9px;
+}
+
+.export-settings label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.export-settings select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 11px;
 }
 
 @media (min-width: 860px) {
