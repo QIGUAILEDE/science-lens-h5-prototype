@@ -44,6 +44,8 @@ The first WebGL shader pass is now available for the four flagship science camer
 
 The flagship science cameras now also use a non-uniform parameter map generated from image luminance, edge, texture, saliency, and Lab/HSV region features. Use the Debug View selector to inspect intermediate maps such as luminance, edge, texture, saliency, channel A/B, stain, and material.
 
+Phase 2 restores the broader feature set: 21 usable science-camera styles, 15 journal/card templates, 11 research figure templates, multi-image Figure import, panel image rendering, and derived analysis views such as visual heatmap, edge map, pseudo contour, superpixel map, pixel statistics, and conceptual model diagrams. See `phase-2-implementation-report.md` for the audit and implementation notes.
+
 ## Git Sync Policy
 
 For this project, major updates should be committed and pushed to GitHub by default.

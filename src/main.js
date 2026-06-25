@@ -40,6 +40,7 @@ const demoImage = createDemoImage();
 
 const state = {
   image: null,
+  images: [],
   imageId: "demo",
   workspace: "cameras",
   compareOriginal: false,
@@ -85,7 +86,13 @@ function bindEvents() {
   resetButton.addEventListener("click", resetTransform);
   downloadButton.addEventListener("click", () => {
     const item = getActiveItem();
-    renderer.render({ source: state.image || demoImage, item, state: exportState(), text: state.text });
+    renderer.render({
+      source: state.image || demoImage,
+      sources: state.images.length ? state.images : [state.image || demoImage],
+      item,
+      state: exportState(),
+      text: state.text
+    });
     downloadCanvas(canvas, `${item.id}.png`);
     state.previewSize = QUALITY_PRESETS[state.quality].previewSize;
     draw();
@@ -136,16 +143,25 @@ function bindEvents() {
 }
 
 function handleFile(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
-  const image = new Image();
-  image.onload = () => {
-    state.image = image;
-    state.imageId = `${file.name}:${file.size}:${file.lastModified}`;
-    URL.revokeObjectURL(image.src);
+  const files = [...(event.target.files || [])];
+  if (!files.length) return;
+  Promise.all(files.map(loadImageFile)).then((images) => {
+    state.images = images;
+    state.image = images[0];
+    state.imageId = files.map((file) => `${file.name}:${file.size}:${file.lastModified}`).join("|");
     resetTransform();
-  };
-  image.src = URL.createObjectURL(file);
+  });
+}
+
+function loadImageFile(file) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(image.src);
+      resolve(image);
+    };
+    image.src = URL.createObjectURL(file);
+  });
 }
 
 function renderWorkspaceTabs() {
@@ -219,6 +235,7 @@ function renderInfo() {
 function draw() {
   renderer.render({
     source: state.image || demoImage,
+    sources: state.images.length ? state.images : [state.image || demoImage],
     item: getActiveItem(),
     state,
     text: state.text,

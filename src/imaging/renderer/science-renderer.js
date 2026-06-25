@@ -1,10 +1,11 @@
-import { drawCover, roundedRect } from "../utils/canvas.js";
+import { drawCover, drawImageInRect, roundedRect } from "../utils/canvas.js";
 import { applyToneAndChannels } from "../passes/color-pass.js";
 import { applyStructurePass } from "../passes/structure-pass.js";
 import { applySensorNoise } from "../passes/noise-pass.js";
 import { applyOptics, drawMicroscopeMask } from "../passes/optics-pass.js";
 import { WebGLSciencePass } from "../shaders/webgl-science-pass.js";
 import { RegionAnalyzer } from "../analysis/region-analyzer.js";
+import { createDerivedView, createSourceCanvas } from "../analysis/derived-views.js";
 
 export class ScienceRenderer {
   constructor(canvas, options = {}) {
@@ -26,7 +27,7 @@ export class ScienceRenderer {
     this.canvas.height = size;
   }
 
-  render({ source, item, state, text, compareOriginal = false }) {
+  render({ source, sources = null, item, state, text, compareOriginal = false }) {
     this.resize(state.previewSize || 1200);
     const ctx = this.ctx;
     const size = this.size;
@@ -49,7 +50,7 @@ export class ScienceRenderer {
     if (item?.type === "science-camera" || item?.type === "planned-camera") {
       this.renderScienceCamera(item, state, text);
     } else if (item?.type === "research-figure") {
-      this.renderResearchFigure(item, state, text);
+      this.renderResearchFigure(item, state, text, sources?.length ? sources : [source]);
     } else {
       this.renderLegacyTemplate(item, state, text);
     }
@@ -92,33 +93,98 @@ export class ScienceRenderer {
     }
   }
 
-  renderResearchFigure(figure, state, text) {
+  renderResearchFigure(figure, state, text, sources) {
     const ctx = this.ctx;
     const size = this.size;
+    const sourceCanvases = sources.map((source) => createSourceCanvas(source, Math.min(720, size)));
+    const sourceCanvas = sourceCanvases[0];
     ctx.save();
     ctx.fillStyle = figure.canvas?.background || "#ffffff";
     ctx.fillRect(0, 0, size, size);
+    if (figure.canvas?.background === "transparent") ctx.clearRect(0, 0, size, size);
+
+    ctx.strokeStyle = figure.canvas?.background === "#050506" ? "rgba(255,255,255,0.16)" : "rgba(0,0,0,0.12)";
+    ctx.lineWidth = Math.max(1, size * 0.0015);
+    ctx.strokeRect(size * 0.025, size * 0.025, size * 0.95, size * 0.91);
+
     const panels = figure.panels || [];
-    panels.forEach((panel) => {
+    panels.forEach((panel, index) => {
       const x = panel.x * size;
       const y = panel.y * size;
       const w = panel.width * size;
       const h = panel.height * size;
+      const mode = panel.analysisMode || (figure.analysisModes || [])[index] || "original";
+      const baseSource = sourceCanvases[index % sourceCanvases.length] || sourceCanvas;
+      const panelSource = mode === "original" ? baseSource : createDerivedView(baseSource, mode, { size: 480 });
+      this.drawFigurePanel(panelSource, panel, x, y, w, h, figure);
+    });
+    this.drawFigureAnnotations(figure, size);
+    ctx.fillStyle = "#111";
+    if (figure.canvas?.background === "#050506") ctx.fillStyle = "#f5f7fb";
+    ctx.font = `${Math.max(22, size * 0.024)}px Arial, sans-serif`;
+    ctx.fillText(text.title || figure.name, size * 0.04, size * 0.952);
+    ctx.font = `${Math.max(16, size * 0.016)}px Arial, sans-serif`;
+    ctx.globalAlpha = 0.72;
+    ctx.fillText(text.subtitle || figure.legend?.text || "derived visual figure / pseudo analysis", size * 0.04, size * 0.978);
+    ctx.restore();
+  }
+
+  drawFigurePanel(source, panel, x, y, w, h, figure) {
+    const ctx = this.ctx;
+    const dark = figure.canvas?.background === "#050506";
+    ctx.save();
+    ctx.fillStyle = dark ? "#050607" : "#f7f7f7";
+    ctx.fillRect(x, y, w, h);
+    drawImageInRect(ctx, source, x, y, w, h, { fit: panel.fit || "cover", radius: 0 });
+    ctx.strokeStyle = dark ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.72)";
+    ctx.lineWidth = Math.max(1.2, this.size * 0.0018);
+    ctx.strokeRect(x, y, w, h);
+    ctx.fillStyle = dark ? "#fff" : "#111";
+    ctx.font = `700 ${Math.max(26, this.size * 0.034)}px Arial, sans-serif`;
+    ctx.fillText(panel.label, x + this.size * 0.012, y + this.size * 0.035);
+    if (panel.caption) {
+      ctx.font = `${Math.max(13, this.size * 0.014)}px Arial, sans-serif`;
+      ctx.globalAlpha = 0.78;
+      ctx.fillText(panel.caption, x + this.size * 0.012, y + h - this.size * 0.018);
+    }
+    ctx.restore();
+  }
+
+  drawFigureAnnotations(figure, size) {
+    const ctx = this.ctx;
+    (figure.annotations || []).forEach((annotation) => {
       ctx.save();
-      ctx.strokeStyle = "#222";
-      ctx.lineWidth = 2;
-      ctx.fillStyle = "#f7f7f7";
-      ctx.fillRect(x, y, w, h);
-      ctx.strokeRect(x, y, w, h);
-      ctx.fillStyle = "#111";
-      ctx.font = `${Math.max(24, size * 0.035)}px Arial, sans-serif`;
-      ctx.fillText(panel.label, x + 12, y + 14);
+      ctx.strokeStyle = annotation.color || "#f43f5e";
+      ctx.fillStyle = annotation.color || "#f43f5e";
+      ctx.lineWidth = Math.max(2, size * 0.003);
+      if (annotation.type === "dashed-rect") {
+        ctx.setLineDash([size * 0.014, size * 0.01]);
+        ctx.strokeRect(size * 0.18, size * 0.24, size * 0.18, size * 0.16);
+      } else if (annotation.type === "arrow") {
+        const x1 = size * (annotation.x1 ?? 0.36);
+        const y1 = size * (annotation.y1 ?? 0.32);
+        const x2 = size * (annotation.x2 ?? 0.52);
+        const y2 = size * (annotation.y2 ?? 0.24);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(x2, y2, size * 0.008, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (annotation.type === "scale-bar") {
+        const x = size * (annotation.x ?? 0.72);
+        const y = size * (annotation.y ?? 0.78);
+        ctx.strokeStyle = annotation.color || "#fff";
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + size * 0.12, y);
+        ctx.stroke();
+        ctx.font = `${Math.max(12, size * 0.014)}px Menlo, monospace`;
+        ctx.fillText(annotation.label || "VISUAL SCALE", x, y - size * 0.012);
+      }
       ctx.restore();
     });
-    ctx.fillStyle = "#111";
-    ctx.font = `${Math.max(22, size * 0.024)}px Arial, sans-serif`;
-    ctx.fillText(text.title || figure.name, size * 0.04, size * 0.955);
-    ctx.restore();
   }
 
   drawScienceMetadata(style, text) {
@@ -153,28 +219,65 @@ export class ScienceRenderer {
     const h = size - margin * 2;
     const border = size * (p.border || 0.035);
     const corner = (p.corner || 14) * (size / 600);
+    const transparent = p.layout === "transparent-card" || p.transparentCard;
+    const masthead = text.title || template.text?.journalName || template.name || "Scientific Journal";
+    const coverTitle = text.subtitle || template.text?.subtitle || "Visual science issue";
+    const issue = text.meta || template.text?.meta || "Vol. 01 / 2026";
     ctx.save();
     ctx.translate(size / 2, size / 2);
     ctx.rotate(((state.cardRotate || 0) * Math.PI) / 180);
     ctx.translate(-size / 2, -size / 2);
-    ctx.shadowColor = "rgba(0,0,0,0.18)";
-    ctx.shadowBlur = size * 0.022;
-    ctx.shadowOffsetY = size * 0.012;
+    ctx.shadowColor = "rgba(0,0,0,0.12)";
+    ctx.shadowBlur = size * 0.012;
+    ctx.shadowOffsetY = size * 0.006;
     roundedRect(ctx, x, y, w, h, corner);
-    ctx.fillStyle = "rgba(255,255,255,0.08)";
+    ctx.fillStyle = transparent ? "rgba(255,255,255,0.035)" : "rgba(250,249,245,0.9)";
     ctx.fill();
     ctx.shadowColor = "transparent";
     ctx.lineWidth = border;
     ctx.strokeStyle = p.frameColor || "#d12027";
     roundedRect(ctx, x, y, w, h, corner);
     ctx.stroke();
-    ctx.fillStyle = p.accentColor || p.frameColor || "#d12027";
-    ctx.font = `${size * 0.055}px Georgia, 'Times New Roman', serif`;
-    ctx.fillText(text.title || template.name, x + border * 1.6, y + border * 1.35);
-    ctx.font = `${size * 0.022}px Arial, sans-serif`;
-    ctx.globalAlpha = 0.86;
-    ctx.fillText(text.subtitle || "Transparent journal frame", x + border * 1.7, y + size * 0.17);
-    ctx.fillText(text.meta || "Vol. 01 / 2026", x + border * 1.7, y + h - size * 0.07);
+
+    const headerY = y + h * 0.065;
+    const headerH = h * (p.header || 0.15);
+    const footerH = h * (p.footer || 0.12);
+    const imageX = x + w * 0.075;
+    const imageY = y + headerH + h * 0.08;
+    const imageW = w * 0.85;
+    const imageH = h - headerH - footerH - h * 0.19;
+
+    ctx.fillStyle = transparent ? "rgba(255,255,255,0.82)" : "rgba(255,255,255,0.78)";
+    if (!transparent) ctx.fillRect(x + w * 0.055, imageY, w * 0.89, imageH);
+    ctx.strokeStyle = p.accentColor || p.frameColor || "#12355b";
+    ctx.lineWidth = Math.max(1.2, size * 0.002);
+    ctx.strokeRect(imageX, imageY, imageW, imageH);
+
+    ctx.fillStyle = p.accentColor || p.frameColor || "#102a5c";
+    ctx.font = `${size * (p.mastheadSize || 0.064)}px Georgia, 'Times New Roman', serif`;
+    ctx.textBaseline = "top";
+    ctx.fillText(masthead, x + w * 0.075, headerY);
+    ctx.globalAlpha = 0.9;
+    ctx.font = `${size * 0.018}px 'SFMono-Regular', Menlo, monospace`;
+    ctx.fillText(issue.toUpperCase(), x + w * 0.075, headerY + headerH * 0.68);
+    ctx.strokeStyle = p.accentColor || p.frameColor || "#102a5c";
+    ctx.globalAlpha = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(x + w * 0.075, y + headerH + h * 0.035);
+    ctx.lineTo(x + w * 0.925, y + headerH + h * 0.035);
+    ctx.stroke();
+
+    ctx.globalAlpha = 1;
+    const footerY = y + h - footerH - h * 0.035;
+    ctx.fillStyle = transparent ? "rgba(255,255,255,0.74)" : "rgba(255,255,255,0.86)";
+    ctx.fillRect(x + w * 0.075, footerY, w * 0.85, footerH * 0.82);
+    ctx.fillStyle = p.accentColor || p.frameColor || "#102a5c";
+    ctx.font = `700 ${size * 0.025}px Arial, sans-serif`;
+    ctx.fillText(coverTitle, x + w * 0.095, footerY + footerH * 0.17);
+    ctx.font = `${size * 0.016}px Arial, sans-serif`;
+    ctx.globalAlpha = 0.78;
+    ctx.fillText(template.text?.footerNote || "Original publication-style frame / editable masthead", x + w * 0.095, footerY + footerH * 0.52);
+
     this.drawAcrylicHighlight(x, y, w, h, state.reflection ?? 0.5);
     ctx.restore();
   }

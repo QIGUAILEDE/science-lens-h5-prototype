@@ -260,7 +260,7 @@
       "engine": "canvas2d",
       "summary": "红色细边框、顶部刊名、中央透明取景。",
       "params": { "border": 0.05, "corner": 16, "header": 0.15, "reflection": 0.12, "shadow": 0.16, "glass": 0.08, "frameColor": "#d12027", "accentColor": "#d12027" },
-      "text": { "title": "SCIENCE VIEW", "subtitle": "A transparent frame for daily experiments", "meta": "Vol. 01 / 2026" }
+      "text": { "title": "Contemporary Science", "subtitle": "A transparent frame for daily experiments", "meta": "Vol. 01 / 2026", "footerNote": "Cover image / visual science issue" }
     },
     {
       "id": "j02_nature_campus",
@@ -271,7 +271,7 @@
       "engine": "canvas2d",
       "summary": "黄色外框、深蓝信息栏、适合蓝天校园场景。",
       "params": { "border": 0.04, "corner": 14, "header": 0.12, "reflection": 0.1, "shadow": 0.14, "glass": 0.15, "frameColor": "#f0c94b", "accentColor": "#102a5c", "innerColor": "#102a5c" },
-      "text": { "title": "NATURE VIEW", "subtitle": "Field notes from campus", "meta": "2026 / Issue 06" }
+      "text": { "title": "Natural Science Reports", "subtitle": "Field notes from campus", "meta": "2026 / Issue 06", "footerNote": "Campus field issue" }
     },
     {
       "id": "j03_cell_minimal",
@@ -282,7 +282,7 @@
       "engine": "canvas2d",
       "summary": "极细边框、小型刊名、醒目的生命科学色块。",
       "params": { "border": 0.022, "corner": 10, "header": 0.1, "reflection": 0.08, "shadow": 0.1, "glass": 0.08, "frameColor": "#111111", "accentColor": "#ef3b2d" },
-      "text": { "title": "CELLULAR", "subtitle": "Life under observation", "meta": "Volume 12 / June" }
+      "text": { "title": "Cellular Reports", "subtitle": "Life under observation", "meta": "Volume 12 / June", "footerNote": "Biology image series" }
     },
     {
       "id": "j04_neural_network",
@@ -293,7 +293,7 @@
       "engine": "canvas2d",
       "summary": "深紫边框、边缘神经网络线条、中央保留透明。",
       "params": { "border": 0.032, "corner": 14, "header": 0.12, "reflection": 0.1, "shadow": 0.18, "glass": 0.12, "frameColor": "#21164f", "accentColor": "#8c6cff", "nodes": 14 },
-      "text": { "title": "NEURAL", "subtitle": "Network / Signals / Memory", "meta": "2026.06" }
+      "text": { "title": "Neural Systems", "subtitle": "Network / Signals / Memory", "meta": "2026.06", "footerNote": "Signal image collection" }
     },
     {
       "id": "j05_microscopy_journal",
@@ -304,7 +304,7 @@
       "engine": "canvas2d",
       "summary": "期刊外框和圆形显微镜视场组合。",
       "params": { "border": 0.035, "corner": 14, "header": 0.12, "footer": 0.1, "mask": 0.72, "feather": 15, "reflection": 0.11, "frameColor": "#0b2533", "accentColor": "#54b7ac" },
-      "text": { "title": "MICROSCOPY", "subtitle": "Pumpkin Stem Cross Section", "meta": "40×  Bright Field  Sample 013" }
+      "text": { "title": "Microscopy Letters", "subtitle": "Pumpkin Stem Cross Section", "meta": "40x  Bright Field  Sample 013", "footerNote": "Image type / sample / channel" }
     },
     {
       "id": "j06_preprint_card",
@@ -315,7 +315,7 @@
       "engine": "canvas2d",
       "summary": "磨砂白透明外框、PREPRINT、版本号和底部作者信息。",
       "params": { "border": 0.04, "corner": 12, "header": 0.1, "reflection": 0.08, "shadow": 0.12, "glass": 0.18, "frameColor": "#f5f1e8", "accentColor": "#232323" },
-      "text": { "title": "PREPRINT", "subtitle": "How to escape the lab on Friday afternoon", "meta": "Version 1 / Under Review" }
+      "text": { "title": "Preprint Quarterly", "subtitle": "How to escape the lab on Friday afternoon", "meta": "Version 1 / Under Review", "footerNote": "Working paper issue" }
     },
     {
       "id": "j07_graduation_issue",
@@ -326,7 +326,7 @@
       "engine": "canvas2d",
       "summary": "金属高光、Graduation Issue、学校学院和纪念文案。",
       "params": { "border": 0.04, "corner": 12, "header": 0.13, "footer": 0.1, "reflection": 0.14, "shadow": 0.18, "glass": 0.12, "frameColor": "#c79d45", "accentColor": "#12355b" },
-      "text": { "title": "GRADUATION ISSUE", "subtitle": "Class of 2026 / The Final Experiment", "meta": "Finally Accepted" }
+      "text": { "title": "Graduation Research", "subtitle": "Class of 2026 / The Final Experiment", "meta": "Finally Accepted", "footerNote": "Special campus edition" }
     },
     {
       "id": "j08_free_journal",
@@ -337,7 +337,84 @@
       "engine": "canvas2d",
       "summary": "自由刊名、主色、卷期和透明取景框。",
       "params": { "border": 0.035, "corner": 16, "header": 0.12, "reflection": 0.11, "shadow": 0.16, "glass": 0.1, "frameColor": "#2f8f89", "accentColor": "#7f6bc9" },
-      "text": { "title": "LAB LIFE", "subtitle": "Scientific daily transparent card", "meta": "Vol. 01 / Issue 01" }
+      "text": { "title": "Laboratory Life", "subtitle": "Scientific daily transparent card", "meta": "Vol. 01 / Issue 01", "footerNote": "Editable journal masthead" }
+    },
+    {
+      "id": "j09_contemporary_science_cover",
+      "index": "J09",
+      "name": "综合科学期刊封面",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "白底大刊名、规整主图窗口、底部封面标题和出版信息。",
+      "params": { "layout": "journal-cover", "border": 0.026, "corner": 8, "header": 0.18, "footer": 0.14, "reflection": 0.04, "frameColor": "#1f2937", "accentColor": "#102a5c", "mastheadSize": 0.058 },
+      "text": { "title": "Contemporary Science", "subtitle": "Visual science cover story", "meta": "Vol. 18 / Issue 06 / 2026", "footerNote": "Original cover frame / editable publication data" }
+    },
+    {
+      "id": "j10_biomedical_imaging_cover",
+      "index": "J10",
+      "name": "生物医学期刊封面",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "蓝白灰规则网格、规范信息栏和医学影像期刊感。",
+      "params": { "layout": "journal-cover", "border": 0.024, "corner": 6, "header": 0.17, "footer": 0.16, "reflection": 0.04, "frameColor": "#d7e4ef", "accentColor": "#1d4f8f", "mastheadSize": 0.05 },
+      "text": { "title": "Journal of Biomedical Imaging", "subtitle": "Microscopy / staining / visual diagnostics", "meta": "Volume 07 / Number 03", "footerNote": "Department image series / sample record" }
+    },
+    {
+      "id": "j11_microscopy_letters_cover",
+      "index": "J11",
+      "name": "显微成像期刊封面",
+      "category": "journal",
+      "type": "journal-hybrid",
+      "engine": "canvas2d",
+      "summary": "大面积主图、底部 image type / sample / channel 信息条。",
+      "params": { "layout": "journal-cover", "border": 0.025, "corner": 8, "header": 0.14, "footer": 0.13, "reflection": 0.05, "frameColor": "#0b2533", "accentColor": "#54b7ac", "mastheadSize": 0.055 },
+      "text": { "title": "Microscopy Letters", "subtitle": "Image Type: simulated fluorescence merge", "meta": "Sample ID / Visual Scale", "footerNote": "Channel A / Channel B / no calibrated measurement" }
+    },
+    {
+      "id": "j12_advanced_matter_cover",
+      "index": "J12",
+      "name": "材料纳米期刊封面",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "图像驱动、现代材料期刊感，适合电镜和偏振图。",
+      "params": { "layout": "journal-cover", "border": 0.022, "corner": 6, "header": 0.13, "footer": 0.12, "reflection": 0.06, "frameColor": "#111827", "accentColor": "#111827", "mastheadSize": 0.052 },
+      "text": { "title": "Advanced Matter", "subtitle": "Surface textures and material structures", "meta": "Issue 09 / 2026", "footerNote": "Cover image / materials visual feature" }
+    },
+    {
+      "id": "j13_transparent_journal_card",
+      "index": "J13",
+      "name": "经典透明期刊透卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "顶部强刊名、中部透明取景、底部少量信息，适合手持拍照。",
+      "params": { "layout": "transparent-card", "transparentCard": true, "border": 0.036, "corner": 12, "header": 0.16, "footer": 0.12, "reflection": 0.16, "frameColor": "#f8f8f4", "accentColor": "#f8f8f4", "mastheadSize": 0.062 },
+      "text": { "title": "Natural Science", "subtitle": "Transparent journal card", "meta": "Field Issue / 2026", "footerNote": "Handheld transparent publication card" }
+    },
+    {
+      "id": "j14_cellular_transparent_card",
+      "index": "J14",
+      "name": "生物透明期刊卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "生物医学刊名、清爽底栏、透明窗口和 sample line。",
+      "params": { "layout": "transparent-card", "transparentCard": true, "border": 0.032, "corner": 12, "header": 0.15, "footer": 0.13, "reflection": 0.14, "frameColor": "#d7f7eb", "accentColor": "#70e1bf", "mastheadSize": 0.054 },
+      "text": { "title": "Cellular Reports Card", "subtitle": "Sample line / image type / channel", "meta": "Biology Field Card", "footerNote": "Editable sample and issue metadata" }
+    },
+    {
+      "id": "j15_article_page",
+      "index": "J15",
+      "name": "论文首页透卡",
+      "category": "journal",
+      "type": "journal",
+      "engine": "canvas2d",
+      "summary": "期刊页眉、大标题、作者区、摘要式底部信息，像论文首页。",
+      "params": { "layout": "journal-cover", "border": 0.02, "corner": 4, "header": 0.13, "footer": 0.22, "reflection": 0.03, "frameColor": "#e5e7eb", "accentColor": "#111827", "mastheadSize": 0.042 },
+      "text": { "title": "Research Article Page", "subtitle": "A visual study of everyday scientific imaging", "meta": "DOI style: 10.visual/2026.06", "footerNote": "Abstract: this page is a publication-inspired editable frame." }
     }
   ]
 }

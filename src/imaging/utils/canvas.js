@@ -22,6 +22,23 @@ export function drawCover(ctx, source, size, transform) {
   ctx.restore();
 }
 
+export function drawImageInRect(ctx, source, x, y, width, height, options = {}) {
+  const imageWidth = source.naturalWidth || source.width;
+  const imageHeight = source.naturalHeight || source.height;
+  const fit = options.fit || "cover";
+  const scale = fit === "contain" ? Math.min(width / imageWidth, height / imageHeight) : Math.max(width / imageWidth, height / imageHeight);
+  const drawWidth = imageWidth * scale * (options.zoom || 1);
+  const drawHeight = imageHeight * scale * (options.zoom || 1);
+  const dx = x + width / 2 - drawWidth / 2 + (options.offsetX || 0);
+  const dy = y + height / 2 - drawHeight / 2 + (options.offsetY || 0);
+
+  ctx.save();
+  roundedRect(ctx, x, y, width, height, options.radius || 0);
+  ctx.clip();
+  ctx.drawImage(source, dx, dy, drawWidth, drawHeight);
+  ctx.restore();
+}
+
 export function roundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -35,4 +52,3 @@ export function roundedRect(ctx, x, y, width, height, radius) {
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
 }
-
